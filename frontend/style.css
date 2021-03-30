@@ -254,7 +254,7 @@ a:last-child > .store-icon {
 
 /* The outer marker div. */
 .marker {
-    width: 66px;
+    width: 120px;
     height: 62px;
 }
 
@@ -324,7 +324,7 @@ a:last-child > .store-icon {
     background-color: rgba(165,0,42,0.5);
 }
 
-.marker p.dead > span.velocity {
+.marker p.dead > span.metric {
     display: none;
 }
 
