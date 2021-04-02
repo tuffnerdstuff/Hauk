@@ -758,8 +758,8 @@ function processUpdate(data, init) {
                 }
                 // Draw an accuracy circle if GPS accuracy was provided by the
                 // client.
-                if (shares[user].circle == null) {
-                    shares[user].circle = L.circle([lat, lon], {radius: acc != null ? acc : 0, fillColor: iconColor, fillOpacity: 0.25, color: iconColor, opacity: 0.5, interactive: false}).addTo(circleLayer);
+                if (acc !== null && shares[user].circle == null) {
+                    shares[user].circle = L.circle([lat, lon], {radius: acc, fillColor: iconColor, fillOpacity: 0.25, color: iconColor, opacity: 0.5, interactive: false}).addTo(circleLayer);
                 } else if (shares[user].circle !== null) {
                     shares[user].circle.setLatLng([lat, lon]);
                     if (acc !== null) shares[user].circle.setRadius(acc);
@@ -896,19 +896,13 @@ function processUpdate(data, init) {
                     }
                     eLastSeen.textContent = unit.split("{{time}}").join(time);
                 }
-                shares[user].circle.setStyle({
-                    fillColor: STATE_DEAD_COLOR,
-                    color: STATE_DEAD_COLOR
-                })
+                setAccuracyCircleColor(shares[user].circle, STATE_DEAD_COLOR);
             } else {
                 eArrow.className = eArrow.className.split("dead").join(shares[user].state);
                 if (eLabel !== null) eLabel.className = shares[user].state;
                 var iconColor = STATE_LIVE_COLOR;
                 if (shares[user].state == "rough") iconColor = STATE_ROUGH_COLOR;
-                shares[user].circle.setStyle({
-                    fillColor: iconColor,
-                    color: iconColor
-                });
+                setAccuracyCircleColor(shares[user].circle, iconColor);
             }
         }
     }
@@ -948,6 +942,15 @@ function getTrackColor(user) {
         currColorIndex=(currColorIndex+1) % TRAIL_COLORS.length;
     }
     return trackColor;
+}
+
+function setAccuracyCircleColor(circle, color) {
+    if( circle ) {
+        circle.setStyle({
+            fillColor: color,
+            color: color
+        });
+    }
 }
 
 // Calculates the distance between two points on a sphere using the Haversine
