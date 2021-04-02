@@ -727,11 +727,13 @@ function processUpdate(data, init) {
                                 '<div class="arrow still-' + shares[user].state + '" id="arrow-' + shares[user].id + '"></div>' +
                                 '<p class="' + shares[user].state + '" id="label-' + shares[user].id + '">' +
                                     '<span id="nickname-' + shares[user].id + '"></span>' +
-                                    '<span class="metric">' +
+                                    '<span class="metric' + (SHOW_VELOCITY ? "" : " hidden") + '">' +
                                         '<span class="metric-label">vel:</span>' +
                                         '<span class="metric-value"><span id="velocity-' + shares[user].id + '">0.0</span> ' +
                                         VELOCITY_UNIT.unit + '</span>' +
                                         '<br>' + 
+                                    '</span>' + 
+                                    '<span id="altitude-container-' + shares[user].id + '" class="metric'+ (SHOW_ALTITUDE_AMSL ? "" : " hidden") + '">' +
                                         '<span class="metric-label">alt:</span>' +
                                         '<span class="metric-value"><span id="altitude-' + shares[user].id + '">0.0</span> ' +
                                         ALTITUDE_UNIT.unit + '</span>' +
@@ -809,9 +811,15 @@ function processUpdate(data, init) {
         // Altitude (If available)
         var eAltitude = document.getElementById("altitude-" + shares[user].id);
         var alt = 0;
+        var eAltitudeContainer = document.getElementById("altitude-container-" + shares[user].id);
         if (lastPoint !== null && lastPoint.alt !== null && eAltitude !== null) {
             alt = lastPoint.alt * ALTITUDE_UNIT.metersMultiplier;
             eAltitude.textContent = alt.toFixed(1);
+            if (SHOW_ALTITUDE_AMSL) {
+                eAltitudeContainer.classList.remove("hidden");
+            }
+        } else {
+            eAltitudeContainer.classList.add("hidden");
         }
 
         // Flag that the first location has been received, for map centering.
